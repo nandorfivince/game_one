@@ -229,6 +229,14 @@ class _LogPageState extends State<LogPage> {
     });
   }
 
+  Future<void> _clearLogs() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('logList');
+    setState(() {
+      logList.clear();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -252,6 +260,17 @@ class _LogPageState extends State<LogPage> {
                   );
                 },
               ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: _clearLogs,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+            ),
+            child: Text(
+              'Clear Logs',
+              style: TextStyle(fontSize: 20, color: Colors.white),
             ),
           ),
           ElevatedButton(

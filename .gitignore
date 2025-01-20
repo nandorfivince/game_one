@@ -1,5 +1,9 @@
 # Flutter related
 **/build/
+build/
+*.apk
+*.aab
+*.ipa
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
