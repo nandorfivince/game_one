@@ -1,0 +1,122 @@
+# Flutter related
+**/build/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.packages
+pubspec.lock
+generated_plugin_registrant.dart
+
+# Android related
+/android/.gradle/
+/android/key.jks
+/android/local.properties
+/android/app/debug.keystore
+*.iml
+.gradle/
+*.apk
+*.aar
+*.log
+
+# iOS related
+ios/Flutter/Flutter.framework/
+ios/Flutter/App.framework/
+ios/.symlinks/
+/ios/Pods/
+ios/Runner.xcworkspace/
+/ios/Flutter/Generated.xcconfig
+ios/Flutter/ephemeral/
+ios/Podfile.lock
+
+# macOS related
+/macos/Flutter/ephemeral/
+/macos/Pods/
+/macos/.symlinks/
+macos/Runner.xcworkspace/
+/macos/Podfile.lock
+*.xcworkspace
+*.xcodeproj
+
+# Windows related
+/windows/flutter/ephemeral/
+
+# Linux related
+/linux/flutter/ephemeral/
+
+# Web related
+/web/.dart_tool/
+/web/manifest.json
+/web/favicon.png
+/web/icons/
+.web/
+
+# Dart related
+*.dart_tool/
+*.js
+*.js.map
+
+# Flutter web autogen files
+/.firebase/
+/firebase.json
+
+# IntelliJ IDEA / Android Studio
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Misc
+.DS_Store
+*.log
+*.swp
+*.swo
+*.swn
+*.bak
+*.tmp
+*.lock
+*.pid
+*.seed
+*.orig
+*.log.*
+*.tmp.*
+*.crt
+*.pem
+*.pfx
+
+# Unit test coverage reports
+coverage/
+
+# Ignore crash logs
+crashlytics/build/
+crashlytics/bin/
+
+# Debugger working directory
+.dart_tool/
+
+# Flutter artifacts
+.flutter-plugins
+.flutter-plugins-dependencies
+.flutter-settings
+
+# Exclude Android Studio/IntelliJ project files
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Private Keys
+*.jks
+*.keystore
+
+# Temporary Files
+temp/
+tmp/
+
+# Logs and lock files
+*.lock
+*.log
