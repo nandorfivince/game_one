@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:csv/csv.dart';
 
 void main() {
   runApp(MyApp());
@@ -50,7 +54,6 @@ class _ToggleButtonScreenState extends State<ToggleButtonScreen> {
       final now = DateTime.now();
       String timestamp = _formatDateTime(now);
 
-      // Mentés a listába
       List<String> logList = prefs.getStringList('logList') ?? [];
       logList.add(timestamp);
       await prefs.setStringList('logList', logList);
@@ -128,9 +131,7 @@ class _ToggleButtonScreenState extends State<ToggleButtonScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Bevettem a gyógyszert?'),
-      ),
+      appBar: AppBar(title: Text('Bevettem a gyógyszert?')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -151,55 +152,24 @@ class _ToggleButtonScreenState extends State<ToggleButtonScreen> {
                 });
                 _saveState(true);
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: isDone ? Colors.green : Colors.red,
-                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-              ),
-              child: Text(
-                isDone ? 'Done' : 'Missing',
-                style: TextStyle(fontSize: 20, color: Colors.white),
-              ),
+              child: Text(isDone ? 'Done' : 'Missing'),
             ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: _clearTimestamp,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange,
-                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-              ),
-              child: Text(
-                'Clear',
-                style: TextStyle(fontSize: 20, color: Colors.white),
-              ),
+              child: Text('Clear'),
             ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => _resetState(preserveTimestamp: false),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-              ),
-              child: Text(
-                'Reset',
-                style: TextStyle(fontSize: 20, color: Colors.white),
-              ),
+              child: Text('Reset'),
             ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LogPage()),
-                );
+                Navigator.push(context, MaterialPageRoute(builder: (context) => LogPage()));
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.purple,
-                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-              ),
-              child: Text(
-                'Log Page >',
-                style: TextStyle(fontSize: 20, color: Colors.white),
-              ),
+              child: Text('Log Page >'),
             ),
           ],
         ),
@@ -229,12 +199,12 @@ class _LogPageState extends State<LogPage> {
     });
   }
 
-  Future<void> _clearLogs() async {
+  Future<void> _deleteLogItem(int index) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('logList');
     setState(() {
-      logList.clear();
+      logList.removeAt(index);
     });
+    await prefs.setStringList('logList', logList);
   }
 
   @override
@@ -244,49 +214,45 @@ class _LogPageState extends State<LogPage> {
       body: Column(
         children: [
           Expanded(
-            child: Padding(
-              padding: EdgeInsets.all(16.0),
-              child: ListView.builder(
-                itemCount: logList.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    child: Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Text(
-                        logList[index],
-                        style: TextStyle(fontSize: 18),
-                      ),
+            child: ListView.builder(
+              itemCount: logList.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  child: ListTile(
+                    title: Text(logList[index]),
+                    trailing: IconButton(
+                      icon: Icon(Icons.delete, color: Colors.red),
+                      onPressed: () => _deleteLogItem(index),
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
           ),
           ElevatedButton(
-            onPressed: _clearLogs,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-            ),
-            child: Text(
-              'Clear Logs',
-              style: TextStyle(fontSize: 20, color: Colors.white),
-            ),
+            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => StatisticsPage())),
+            child: Text('Statistics >'),
           ),
           ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.grey,
-              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-            ),
-            child: Text(
-              '< Home',
-              style: TextStyle(fontSize: 20, color: Colors.white),
-            ),
+            onPressed: () => Navigator.pop(context),
+            child: Text('< Home'),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class StatisticsPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Statistics')),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text('< Home'),
+        ),
       ),
     );
   }
